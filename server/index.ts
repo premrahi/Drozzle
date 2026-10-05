@@ -9,9 +9,11 @@ const PORT = process.env.port || 5000;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.json({ message: "server is running fine!" });
+app.get("/health", (req, res) => {
+  res.json({ message: "server is running fine!" , ok:true });
 });
+
+
 
 const server = http.createServer(app) ;
 attachLogSocket(server) ;
