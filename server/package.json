@@ -1,16 +1,16 @@
 {
-  "name": "server",
+  "name": "dockpanel-backend",
   "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
+  "description": "Backend for DockPanel - a Docker container dashboard",
+  "main": "dist/server.js",
   "type": "module",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.ts",
-    "dev": "nodemon --exec tsx index.ts"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts",
+    "typecheck": "tsc --noEmit"
   },
-   "dependencies": {
+  "dependencies": {
     "cors": "^2.8.5",
     "dockerode": "^4.0.2",
     "express": "^4.19.2",
@@ -25,5 +25,4 @@
     "tsx": "^4.16.0",
     "typescript": "^5.5.0"
   }
-
 }
