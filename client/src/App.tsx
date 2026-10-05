@@ -1,12 +1,14 @@
-import React from 'react'
+
+import Header from "./components/Header";
 
 const App = () => {
+  
   return (
-    <div>
-
-      <h1 className=''> drozzle </h1>
+    <div className="app">
+     <Header />
+      
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
