@@ -4,8 +4,8 @@ import logo from "../assets/logo.png"
 const Header = () => {
   return (
     <div className="navbar bg-red-900 shadow-sm">
-      <div className="flex-1">
-        <a className="btn btn-ghost text-xl">
+      <div className="flex-1  ">
+        <a className="btn btn-ghost text-xl font-myfont2 hover:scale-105 transition-transform delay-100 hover:bg-red-900 border-none rounded-full">
             <img src={logo} className="w-14"/>
             Drozzle</a>
       </div>
