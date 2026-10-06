@@ -19,4 +19,8 @@ export interface ContainerStatsSnapshot {
   memUsageMB: number;
   memLimitMB: number;
   memPercent: number;
+  networkRxBytes: number;
+  networkTxBytes: number;
+  packetsDroppedIn: number;
+  packetsDroppedOut: number; 
 }

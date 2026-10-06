@@ -1,9 +1,14 @@
 import Docker from "dockerode";
 import type { ContainerStatsSnapshot, ContainerSummary } from "./types.js";
 
-
+// Connects to the local Docker daemon via the default socket.
+// On Linux/macOS this is /var/run/docker.sock (mounted automatically by dockerode).
+// On Windows, dockerode defaults to the named pipe //./pipe/docker_engine.
 const docker = new Docker();
 
+/**
+ * List all containers (running + stopped) with the fields the UI needs.
+ */
 export async function listContainers(): Promise<ContainerSummary[]> {
   const containers = await docker.listContainers({ all: true });
   return containers.map((c) => ({
@@ -35,7 +40,10 @@ export async function restartContainer(id: string): Promise<void> {
   await container.restart();
 }
 
-
+/**
+ * One-shot CPU/memory stats snapshot for a container.
+ * Docker's raw stats need a bit of math to turn into usable percentages.
+ */
 export async function getContainerStats(id: string): Promise<ContainerStatsSnapshot> {
   const container = docker.getContainer(id);
   const stats = await container.stats({ stream: false });
@@ -54,11 +62,26 @@ export async function getContainerStats(id: string): Promise<ContainerStatsSnaps
   const memLimit = stats.memory_stats.limit ?? 1;
   const memPercent = (memUsage / memLimit) * 100;
 
+  const networks = Object.values(stats.networks ?? {}) as Array<{
+    rx_bytes?: number;
+    tx_bytes?: number;
+    rx_dropped?: number;
+    tx_dropped?: number;
+  }>;
+  const networkRxBytes = networks.reduce((sum, n) => sum + (n.rx_bytes ?? 0), 0);
+  const networkTxBytes = networks.reduce((sum, n) => sum + (n.tx_bytes ?? 0), 0);
+  const packetsDroppedIn = networks.reduce((sum, n) => sum + (n.rx_dropped ?? 0), 0);
+  const packetsDroppedOut = networks.reduce((sum, n) => sum + (n.tx_dropped ?? 0), 0);
+
   return {
     cpuPercent: Number(cpuPercent.toFixed(2)),
     memUsageMB: Number((memUsage / 1024 / 1024).toFixed(1)),
     memLimitMB: Number((memLimit / 1024 / 1024).toFixed(1)),
     memPercent: Number(memPercent.toFixed(2)),
+    networkRxBytes,
+    networkTxBytes,
+    packetsDroppedIn,
+    packetsDroppedOut,
   };
 }
 
@@ -66,7 +89,10 @@ export interface LogStreamOptions {
   tail?: number;
 }
 
-
+/**
+ * Returns a live log stream (Node stream) for a container.
+ * Used by the WebSocket layer to pipe logs to the client.
+ */
 export function getLogStream(
   id: string,
   { tail = 100 }: LogStreamOptions = {}
