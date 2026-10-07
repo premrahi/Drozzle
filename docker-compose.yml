@@ -1,0 +1,10 @@
+name: drozzle
+
+services:
+  backend:
+    build: ./server
+    container_name: drozzle-backend
+    ports:
+      - "4001:4000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

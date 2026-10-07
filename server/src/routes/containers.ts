@@ -5,7 +5,7 @@ import {
   stopContainer,
   restartContainer,
   getContainerStats,
-} from "../dockerServices";
+} from "../dockerServices.js";
 
 const containersRouter = Router();
 
