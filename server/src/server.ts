@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import http from "http" ;
-import { attachLogSocket } from "./webSockets/logs";
-import containersRouter from "./routes/containers";
+import { attachLogSocket } from "./webSockets/logs.js";
+import containersRouter from "./routes/containers.js";
 
 
 const app = express();
-const PORT = process.env.port || 5000;
+const PORT = Number(process.env.PORT) || 4000;
 
 app.use(cors());
 app.use(express.json());

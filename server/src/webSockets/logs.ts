@@ -1,6 +1,6 @@
 import type { IncomingMessage, Server as HttpServer } from "http";
 import { WebSocketServer, type WebSocket } from "ws";
-import { getLogStream } from "../dockerServices";
+import { getLogStream } from "../dockerServices.js";
 
 export function attachLogSocket(httpServer: HttpServer): WebSocketServer {
   const wss = new WebSocketServer({ noServer: true });
