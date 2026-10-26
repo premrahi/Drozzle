@@ -2,7 +2,7 @@ import axios from "axios";
 import type { ActionResponse, Container, Stats } from "./types";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
+  baseURL: import.meta.env.VITE_API_URL ?? "http://localhost:4000",
   timeout: 10000,
 });
 
@@ -38,10 +38,11 @@ export function openLogSocket(id: string) {
   }
 
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const host = window.location.hostname || "localhost";
-  const port = ":4000";
+  const host = import.meta.env.PROD
+    ? window.location.host
+    : `${window.location.hostname}:4000`;
 
-  return new WebSocket(`${protocol}://${host}${port}/ws/logs/${id}`);
+  return new WebSocket(`${protocol}://${host}/ws/logs/${id}`);
 }
 
 export default api;

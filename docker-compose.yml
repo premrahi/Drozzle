@@ -4,7 +4,16 @@ services:
   backend:
     build: ./server
     container_name: drozzle-backend
-    ports:
-      - "4001:4000"
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  frontend:
+    build: ./client
+    container_name: drozzle-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      
