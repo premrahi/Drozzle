@@ -8,7 +8,12 @@ import containersRouter from "./routes/containers.js";
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://drozzle.vercel.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.get("/health", (req, res) => {
