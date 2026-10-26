@@ -1,9 +1,11 @@
+
 import axios from "axios";
 import type { ActionResponse, Container, Stats } from "./types";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? "https://drozzle-2.onrender.com",
   timeout: 10000,
+  withCredentials: true,
 });
 
 export const fetchContainers = async () => {
@@ -38,8 +40,9 @@ export function openLogSocket(id: string) {
   }
 
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+
   const host = import.meta.env.PROD
-    ? window.location.host
+    ? "drozzle-2.onrender.com"
     : `${window.location.hostname}:4000`;
 
   return new WebSocket(`${protocol}://${host}/ws/logs/${id}`);
